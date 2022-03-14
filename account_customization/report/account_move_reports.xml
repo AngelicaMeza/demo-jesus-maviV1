@@ -1,0 +1,763 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="paperformat_purchase_order" model="report.paperformat">
+            <field name="name">paperformat.purchase.order</field>
+            <field name="format">custom</field>
+            <field name="orientation">Portrait</field>
+            <field name="page_height">280</field>
+            <field name="page_width">220</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+        </record>
+
+        <template id="custom_layout_account_invoice" name="custom_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+                <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')" style="font-size: 10px">
+                    <t t-if="header">
+                        <div class="row" style="margin-bottom: 5px" >
+                            <t t-raw="header"/>
+                        </div>
+                    </t>
+                    <t t-if="invoice_info">
+                        <t t-raw="invoice_info"/>
+                    </t>
+                    <t t-if="supplier_info">
+                        <t t-raw="supplier_info"/>
+                    </t>
+                    <t t-if="purchase_order_lines">
+                        <div style="height: 7cm; ">
+                            <t t-raw="purchase_order_lines"/>
+                        </div>
+                    </t>
+                    <t t-if="totals">
+                        <div class="row" style="margin-top: 5px;">
+                            <t t-raw="totals"/>
+                        </div>
+                    </t>
+                    <t t-if="extra_info">
+                        <div style="margin-top: 5px;">
+                            <t t-raw="extra_info"/>
+                        </div>
+                    </t>
+                    <t t-if="signatures">
+                        <div>
+                            <t t-raw="signatures"/>
+                        </div>
+                    </t>
+                </div>
+        </template>
+    
+        <template id="report_account_invoice_custom">
+            <t t-call="account_customization.custom_layout_account_invoice">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+                <!-- Report here -->
+                <t t-set="invoice_info">
+                    <table class="col-12 text-center table table-sm table-bordered border border-5">
+                        <tr>
+                            <td>
+                                <p>
+                                    ISSUE DATE:
+                                </p>
+                            </td>
+                            <td>
+                                <span t-field="o.invoice_date"/>
+                            </td>
+                            <t t-if="o.move_type == 'out_invoice' and o.state == 'posted' and not o.debit_origin_id">
+                                <td colspan="2">
+                                    <p>
+                                        LOAD ORDER:       TEST
+                                    </p>
+                                </td>
+                            </t>
+                            <t t-else="">
+                                <td/>
+                                <td/>
+                            </t>
+                            <td>
+                            <strong>
+                                DOCUMENT :
+                            </strong>
+                            </td>
+                            <td>
+                                <strong>
+                                    <span t-if="o.move_type == 'out_invoice' and o.state == 'posted' and not o.debit_origin_id">Invoice</span>
+                                    <span t-if="o.move_type == 'out_refund' and not o.debit_origin_id">Credit Note</span>
+                                    <span t-if="o.debit_origin_id">Debit Note</span>
+                                </strong>
+                            </td>
+                        </tr>
+                        <t t-if="o.move_type == 'out_invoice' and o.state == 'posted' and not o.debit_origin_id">
+                            <tr>
+                                <td>
+                                    <p>
+                                        HOUR:
+                                    </p>
+                                </td>
+                                <td>
+                                    TEST HOUR
+                                </td>
+                                <td colspan="2">
+                                    <p>
+                                        BY DISPATCH:       TEST
+                                    </p>
+                                </td>
+                                <td>
+                                <strong>
+                                    NUMBER
+                                </strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.name"/>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td>
+                                <p>
+                                    BUSINESS NAME:
+                                </p>
+                            </td>
+                            <td>
+                                <span t-field="o.partner_id.name"/>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <t t-if="o.move_type == 'out_invoice' and o.state == 'posted' or o.debit_origin_id">
+                                <!-- Chequear condicion para nota debito -->
+                                <td>
+                                    <p>
+                                        REFERENCE
+                                    </p>
+                                </td>
+                                <td>
+                                    <span t-field="o.payment_reference"/>
+                                </td>
+                            </t>
+                            <!-- <t t-elif="condition">
+                            </t> -->
+                            <t t-else="">
+                                <td/>
+                                <td/>
+                            </t>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    COMERCIAL NAME:
+                                </p>
+                            </td>
+                            <td>
+                                <span t-field="o.partner_id.name"/>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <p>
+                                    CONDITION
+                                </p>
+                            </td>
+                            <td>
+                                <!-- <span t-set="date_diff" t-value="o.date_difference()"/> -->
+                                <p>TEST DIFFERENCE</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <p>
+                                    CLIENT VAT:
+                                </p>
+                            </td>
+                            <td>
+                                <span t-field="o.partner_id.vat"/>
+                            </td>
+                            <td colspan="2">
+                                <p>PHONE:
+                                    <span t-field="o.partner_id.phone" />
+                                </p>
+                            </td>
+                            <td>
+                                <p>
+                                    DUE DATE
+                                </p>
+                            </td>
+                            <td>
+                                <!-- <span t-set="date_diff" t-value="o.date_difference()"/> -->
+                                <span t-field="o.invoice_date_due" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                FISCAL ADDRESS:
+                            </td>
+                            <td colspan="5">
+                                <span t-field="o.partner_id.street" />,
+                                <span t-field="o.company_id.partner_id.street2"/>,
+                                <span t-field="o.company_id.partner_id.city"/>,
+                                <span t-field="o.company_id.partner_id.state_id.name"/>,
+                                <span t-field="o.company_id.partner_id.zip"/>, 
+                                <span t-field="o.company_id.partner_id.country_id.name"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <t t-set="purchase_order_lines">
+                        <t t-if="o.move_type == 'out_invoice' and o.state == 'posted' and not o.debit_origin_id">
+                            <t t-call="account_customization.invoice_with_payment_body" t-lang="o.partner_id.lang"/>
+                        </t>
+                        <t t-if="o.move_type == 'out_refund' and not o.debit_origin_id">
+                            <t t-call="account_customization.invoice_with_credit_note_body" t-lang="o.partner_id.lang"/>
+                        </t>
+                        <t t-if="o.debit_origin_id">
+                            <t t-call="account_customization.invoice_with_debit_note_body" t-lang="o.partner_id.lang"/>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <template id="invoice_with_payment_body">
+            <table class="col-12 text-center table table-sm table-bordered border border-5">
+                <thead class="table-dark">
+                    <tr>
+                        <td>
+                            <strong>CODE</strong>
+                        </td>
+                        <td>
+                            <strong>PRODUCT NAME</strong>
+                        </td>
+                        <td>
+                            <strong>TIPO</strong>
+                        </td>
+                        <td>
+                            <strong>BASKETS</strong>
+                        </td>
+                        <td>
+                            <strong>KILOS</strong>
+                        </td>
+                        <td>
+                            <strong>USD PRICE</strong>
+                        </td>
+                        <td>
+                            <strong>TAX %</strong>
+                        </td>
+                        <td>
+                            <strong>SUBTOTAL</strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                        <tr>
+                            <td>
+                                <span t-field="line.product_id.default_code"/>
+                            </td>
+                            <td>
+                                <span t-field="line.product_id.name"/>
+                            </td>
+                            <td>
+                                <p>TYPE</p>
+                            </td>
+                            <td>
+                                <span t-field="line.quantity"/>
+                            </td>
+                            <td>
+                                <p>KILOS</p>
+                            </td>
+                            <td>
+                                <span t-field="line.price_unit"/>
+                            </td>
+                            <td>
+                                <span t-field="line.tax_ids.amount"/>
+                            </td>
+                            <td>
+                                <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                            </td>
+                        </tr>
+                    </t>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>CHANGE TYPE BS: </p>
+                        </td>
+                        <td>
+                            <strong>BCV</strong>
+                        </td>
+                        <td>
+                            <p>TEST RATE</p>
+                        </td>
+                        <td>
+                            <p>BS./USD</p>
+                        </td>
+                        <td></td>
+                        <td>
+                            <p>EXEMPT:USD</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_untaxed"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>EXEMPT BS: </p>
+                        </td>
+                        <td colspan="3">
+                            <span t-field="o.amount_untaxed"/>
+                        </td>
+                        <td colspan="2">
+                            <p>COMERCIAL DISCOUNT: USD</p>
+                        </td>
+                        <td>
+                            <p>TEST DISCOUNT</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>TAXABLE BASE BS:</p>
+                        </td>
+                        <td colspan="2">
+                            <p>TEST BASE</p>
+                        </td>
+                        <td></td>
+                        <td colspan="2">
+                            <p>TAXABLE BASE 16% : USD</p>
+                        </td>
+                        <td>
+                            <p>TEST USD BASE</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>TAX 16% BS</p>
+                        </td>
+                        <td colspan="2" class="border-bottom border-right-0 border-dark">
+                            <span t-field="o.amount_tax"/>
+                        </td>
+                        <td></td>
+                        <td colspan="2">
+                            <p>TAX 16% : USD</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_tax"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <p>TOTAL BS:</p>
+                        </td>
+                        <td colspan="2">
+                            <span t-field="o.amount_total"/>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <p>TOTAL USD:</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_total"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template id="invoice_with_credit_note_body">
+            <table class="col-12 text-center table table-sm table-bordered border border-5">
+                <thead class="table-dark">
+                    <tr>
+                        <td>
+                            <strong>CODE</strong>
+                        </td>
+                        <td>
+                            <strong>PRODUCT NAME</strong>
+                        </td>
+                        <td>
+                            <strong>TIPO</strong>
+                        </td>
+                        <td>
+                            <strong>AMOUNT</strong>
+                        </td>
+                        <td>
+                            <strong>PRICE</strong>
+                        </td>
+                        <td>
+                            <strong>TAX %</strong>
+                        </td>
+                        <td>
+                            <strong>SUBTOTAL</strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                        <tr>
+                            <td>
+                                <span t-field="line.product_id.default_code"/>
+                            </td>
+                            <td>
+                                <span t-field="line.product_id.name"/>
+                            </td>
+                            <td>
+                                <p>TYPE</p>
+                            </td>
+                            <td>
+                                <span t-field="line.quantity"/>
+                            </td>
+                            <td>
+                                <span t-field="line.price_unit"/>
+                            </td>
+                            <td>
+                                <span t-field="line.tax_ids.amount"/>
+                            </td>
+                            <td>
+                                <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                            </td>
+                        </tr>
+                    </t>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <!-- comenzar cambios aqui :D -->
+                    <tr> 
+                        <td colspan="2">
+                            <strong>APPLIED TO INVOICE:  </strong>
+                            <span t-field="o.ref"/>
+                        </td>
+                        <td colspan="3">
+                            <strong>CHANGE TYPE BS</strong>
+                            <p>BCV</p>
+                            <p>TEST RATE</p>
+                            <p>BS/USD</p>
+                        </td>
+                        <td colspan="1">
+                            <p>EXEMPT SUBTOTAL USD</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_untaxed"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <strong>FISCAL CONTROL NUMBER</strong>
+                            <p>TEST CONTROL NUMBER</p>
+                        </td>
+                        <td colspan="3">
+                            <strong>EXEMPT BS</strong>
+                            <p>EXEMPT AMOUNT</p>
+                        </td>
+                        <td>
+                            <p>TOTAL TAXABLE BASE USD:</p>
+                        </td>
+                        <td>
+                            <p>TEST BASE</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <strong>INVOCE DATE</strong>
+                            <span t-field="o.invoice_date"/>
+                        </td>
+                        <td colspan="3">
+                            <strong>TAXABLE BASE BS</strong>
+                            <p>TEST BS BASE</p>
+                        </td>
+                        <td>
+                            <p>TOTAL 16% TAX USD</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_tax"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="empty-cells: show; width:50%; height: 1cm;"/>
+                        <td colspan="3">
+                            <strong>TAX 16% BASE</strong>
+                            <span t-field="o.amount_tax"/>
+                        </td>
+                        <td>
+                            <p>TOTAL CREDIT NOTE USD</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_total"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="empty-cells: show; width:50%; height: 1cm;"/>
+                        <td colspan="3">
+                            <strong>TOTAL BS:</strong>
+                            <span t-field="o.amount_total"/>
+                        </td>
+                        <td colspan="3">
+                            <strong>APPROVED BY</strong>
+                            <p> SUPERVISOR</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+        <template id="invoice_with_debit_note_body">
+            <table class="col-12 text-center table table-sm table-bordered border border-5">
+                <thead class="table-dark">
+                    <tr>
+                        <td>
+                            <strong>CODE</strong>
+                        </td>
+                        <td>
+                            <strong>PRODUCT NAME</strong>
+                        </td>
+                        <td>
+                            <strong>TIPO</strong>
+                        </td>
+                        <td>
+                            <strong>KILOS</strong>
+                        </td>
+                        <td>
+                            <strong>PRICE</strong>
+                        </td>
+                        <td>
+                            <strong>TAX %</strong>
+                        </td>
+                        <td>
+                            <strong>SUBTOTAL</strong>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="current_subtotal" t-value="0"/>
+                    <t t-foreach="o.invoice_line_ids" t-as="line">
+                        <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                        <tr>
+                            <td>
+                                <span t-field="line.product_id.default_code"/>
+                            </td>
+                            <td>
+                                <span t-field="line.product_id.name"/>
+                            </td>
+                            <td>
+                                <p>TYPE</p>
+                            </td>
+                            <td>
+                                <span t-field="line.quantity"/>
+                            </td>
+                            <td>
+                                <span t-field="line.price_unit"/>
+                            </td>
+                            <td>
+                                <span t-field="line.tax_ids.amount"/>
+                            </td>
+                            <td>
+                                <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                            </td>
+                        </tr>
+                    </t>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr style="empty-cells: show; width:100%; height: 1cm;">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <!-- comenzar cambios aqui :D -->
+                    <tr> 
+                        <td colspan="2">
+                            <strong>APPLIED TO INVOICE:  </strong>
+                            <span t-field="o.debit_origin_id.name"/>
+                        </td>
+                        <td colspan="3">
+                            <strong>CHANGE TYPE BS</strong>
+                            <p>BCV</p>
+                            <p>TEST RATE</p>
+                            <p>BS/USD</p>
+                        </td>
+                        <td colspan="1">
+                            <p>EXEMPT SUBTOTAL USD</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_untaxed"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <strong>FISCAL CONTROL NUMBER</strong>
+                            <p>TEST CONTROL NUMBER</p>
+                        </td>
+                        <td colspan="3">
+                            <strong>EXEMPT BS</strong>
+                            <p>EXEMPT AMOUNT</p>
+                        </td>
+                        <td>
+                            <p>TOTAL TAX USD:</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_tax"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <strong>INVOCE DATE</strong>
+                            <span t-field="o.invoice_date"/>
+                        </td>
+                        <td colspan="3">
+                            <strong>TAXABLE BASE BS</strong>
+                            <p>TEST BS BASE</p>
+                        </td>
+                        <td>
+                            <p>TOTAL 16% TAX USD</p>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_tax"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="empty-cells: show; width:50%; height: 1cm;"/>
+                        <td colspan="3">
+                            <strong>TAX 16% USD</strong>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_tax"/>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_total"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <strong>AMOUNT INVOICE BS</strong>
+                        </td>
+                        <td colspan="3">
+                            <strong>TAX 16% BS</strong>
+                            <p>TAX BS AMOUNT</p>
+                        </td>
+                        <td >
+                            <strong>TOTAL DEBIT NOTE</strong>
+                        </td>
+                        <td>
+                            <span t-field="o.amount_total"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="empty-cells: show; width:50%; height: 1cm;"/>
+                        <td colspan="3">
+                            <strong>TOTAL BS:</strong>
+                            <span t-field="o.amount_total"/>
+                        </td>
+                        <td colspan="2">
+                            <strong>APPROVED BY</strong>
+                            <p> SUPERVISOR</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+
+
+        <template id="report_invoice_with_payments_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="account_customization.report_account_invoice_custom" t-lang="o.partner_id.lang"/>
+                    <!-- <t t-call="account_customization.report_invoice_with_payments_conditions" t-lang="o.partner_id.lang"/> -->
+                </t>
+            </t>
+        </template>
+
+        <report 
+            string="Sale invoice" 
+            id="account.account_invoices" 
+            model="account.move" 
+            report_type="qweb-pdf"
+            paperformat="paperformat_purchase_order"
+            name="account_customization.report_invoice_with_payments_custom" 
+            file="account_customization.report_invoice_with_payments_custom"
+            print_report_name="'Sale invoice - %s' % (object.name))"
+        />
+    
+    </data>
+</odoo>

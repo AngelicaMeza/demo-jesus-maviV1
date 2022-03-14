@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="paperformat_purchase_order" model="report.paperformat">
+            <field name="name">paperformat.purchase.order</field>
+            <field name="format">custom</field>
+            <field name="orientation">Portrait</field>
+            <field name="page_height">280</field>
+            <field name="page_width">220</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+        </record>
+
+        <template id="custom_layout_purchase_order" name="custom_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+                <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')" style="font-size: 10px">
+                    <t t-if="header">
+                        <div class="row" style="margin-bottom: 5px" >
+                            <t t-raw="header"/>
+                        </div>
+                    </t>
+                    <t t-if="invoice_info">
+                        <t t-raw="invoice_info"/>
+                    </t>
+                    <t t-if="supplier_info">
+                        <t t-raw="supplier_info"/>
+                    </t>
+                    <t t-if="purchase_order_lines">
+                        <div style="height: 7cm; ">
+                            <t t-raw="purchase_order_lines"/>
+                        </div>
+                    </t>
+                    <t t-if="totals">
+                        <div class="row" style="margin-top: 5px;">
+                            <t t-raw="totals"/>
+                        </div>
+                    </t>
+                    <t t-if="extra_info">
+                        <div style="margin-top: 5px;">
+                            <t t-raw="extra_info"/>
+                        </div>
+                    </t>
+                    <t t-if="signatures">
+                        <div>
+                            <t t-raw="signatures"/>
+                        </div>
+                    </t>
+                </div>
+        </template>
+    
+        <template id="report_purchaseorder_document_custom">
+            <t t-call="purchase_customization.custom_layout_purchase_order">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+                <!-- Report here -->
+                <t t-set="header">
+                    <div class="col-12 text-center">
+                        <div>
+                            <strong>EL GRUPO</strong>
+                        </div>
+                        <div>
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="height: 120px; margin-bottom: 5px;" alt="Logo"/>
+                        </div>
+                        <div>
+                            <span t-field="o.company_id.partner_id.street"/>, <span t-field="o.company_id.partner_id.street2"/>, <span t-field="o.company_id.partner_id.city"/>, <span t-field="o.company_id.partner_id.state_id.name"/>, Zona Postal <span t-field="o.company_id.partner_id.zip"/>, <span t-field="o.company_id.partner_id.country_id.name"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-set="invoice_info">
+                    <div>
+                        <table class="col-12 text-center table table-sm table-bordered border border-5">
+                            <tr>
+                                <th>
+                                    <strong>CITY</strong>
+                                </th>
+                                <th>
+                                    <strong>PHONE</strong>
+                                </th>
+                                <th>
+                                    <strong>VAT</strong>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span t-field="o.company_id.city"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.company_id.phone"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.company_id.vat"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-12 text-center">
+                        <h1>
+                            PURCHASE ORDER <span t-field="o.name"/>
+                        </h1>
+                    </div>
+                    <div>
+                        <table class="col-12 text-center table table-sm table-bordered border border-5">
+                            <tr>
+                                <th>
+                                    <strong>
+                                        <span t-field="o.partner_id.name"/>
+                                    </strong>
+                                </th>
+                                <th>
+                                    <strong>
+                                        DATE
+                                    </strong>
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <span t-field="o.partner_id.city"/>
+                                </td>
+                                <td>
+                                    <span t-field="o.date_planned" t-options="{'widget': 'date'}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+                <t t-set="purchase_order_lines">
+                    <div>
+                        <table class="col-12 text-center table table-sm table-bordered border border-5">
+                            <thead class="table-dark">
+                                <tr>
+                                    <td>
+                                        <strong>REF</strong>
+                                    </td>
+                                    <td>
+                                        <strong>QUANTITY</strong>
+                                    </td>
+                                    <td>
+                                        <strong>DESCRIPTION</strong>
+                                    </td>
+                                    <td>
+                                        <strong>UNITARY $</strong>
+                                    </td>
+                                    <td>
+                                        <strong>TOTAL $</strong>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="current_subtotal" t-value="0"/>
+                                <t t-foreach="o.order_line" t-as="line">
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                                    <tr>
+                                        <td>
+                                            <span t-field="line.product_id.default_code"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.product_uom_qty"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.price_unit"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>SUBTOTAL $</strong></td>
+                                    <td>
+                                        <span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>TAX 16% $</strong></td>
+                                    <td>
+                                        <span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td><strong>TOTAL $</strong></td>
+                                    <td>
+                                        <span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+                <t t-set="signatures">
+                    <table class="col-12 text-center table table-sm table-bordered border border-5">
+                        <tr>
+                            <th>
+                                <strong>MADE BY</strong>
+                            </th>
+                            <th>
+                                <strong>AUTHORIZED BY PURCHASE MANAGER</strong>
+                            </th>
+                            <th>
+                                <strong>APPROVED BY VICEPRESIDENT</strong>
+                            </th>
+                            <th>
+                                <strong>APPROVED BY CHIEF OPERATING MANAGER</strong>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="padding : 0;">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td>
+                                            <strong>NAME</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>DATE</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <strong>SIGNATURE</strong>
+                                        </td>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="padding : 0;">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="padding : 0;">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="padding : 0;">
+                                <table style="width:100%;">
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span t-field="o.user_id.name"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_purchaseorder_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="purchase_customization.report_purchaseorder_document_custom" t-lang="o.partner_id.lang"/>
+                    <!-- <t t-call="purchase_customization.report_purchaseorder_conditions" t-lang="o.partner_id.lang"/> -->
+                </t>
+            </t>
+        </template>
+
+        <report 
+            string="Purchase Order" 
+            id="purchase.action_report_purchase_order" 
+            model="purchase.order" 
+            report_type="qweb-pdf"
+            paperformat="paperformat_purchase_order"
+            name="purchase_customization.report_purchaseorder_custom" 
+            file="purchase_customization.report_purchaseorder_custom"
+            print_report_name="
+                (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or
+                'Purchase Order - %s' % (object.name))"
+        />
+    
+    </data>
+</odoo>

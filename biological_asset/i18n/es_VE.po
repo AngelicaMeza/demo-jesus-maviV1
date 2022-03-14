@@ -1,0 +1,216 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* biological_asset
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-11-25 19:45+0000\n"
+"PO-Revision-Date: 2021-11-25 19:45+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: biological_asset
+#: code:addons/biological_asset/models/biological_asset_models.py:0
+#, python-format
+msgid "(prorata entry)"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields.selection,name:biological_asset.selection__account_asset__method__degressive_then_linear
+msgid "Accelerated Degressive"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model,name:biological_asset.model_account_asset_data
+msgid "Account Asset Data"
+msgstr "Datos de Activo Biológico"
+
+#. module: biological_asset
+#: model:ir.model,name:biological_asset.model_account_asset_species
+msgid "Account Asset Species"
+msgstr "Linea Genética del Activo"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__asset_id
+msgid "Asset ID"
+msgstr "ID de Activo"
+
+#. module: biological_asset
+#: model:ir.model,name:biological_asset.model_account_asset
+msgid "Asset/Revenue Recognition"
+msgstr "Reconocimiento de pagos/ingresos"
+
+#. module: biological_asset
+#: model:ir.model.fields.selection,name:biological_asset.selection__account_asset__method__bio
+msgid "Biological"
+msgstr "Curva de Agotamiento"
+
+#. module: biological_asset
+#: model_terms:ir.ui.view,arch_db:biological_asset.view_account_asset_biological_tree
+msgid "Biological Assets"
+msgstr "Activos biológicos"
+
+#. module: biological_asset
+#: model:ir.actions.act_window,name:biological_asset.master_account_asset_biological_model_action
+#: model_terms:ir.ui.view,arch_db:biological_asset.view_account_asset_biological_model_tree
+msgid "Biological asset model"
+msgstr "Modelo de activos biológicos"
+
+#. module: biological_asset
+#: model:ir.model.fields,help:biological_asset.field_account_asset__method
+msgid ""
+"Choose the method to use to compute the amount of depreciation lines.\n"
+"  * Linear: Calculated on basis of: Gross Value / Number of Depreciations\n"
+"  * Degressive: Calculated on basis of: Residual Value * Degressive Factor\n"
+"  * Accelerated Degressive: Like Degressive but with a minimum depreciation value equal to the linear value.\n"
+"  * Biological: "
+msgstr ""
+
+#. module: biological_asset
+#: model_terms:ir.actions.act_window,help:biological_asset.master_account_asset_biological_model_action
+msgid "Create new biological asset model"
+msgstr "Crear un nuevo modelo de activos biológicos"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__create_uid
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__create_date
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset__data_ids
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__data_ids
+msgid "Data"
+msgstr "Datos"
+
+#. module: biological_asset
+#: model:ir.model.fields.selection,name:biological_asset.selection__account_asset__method__degressive
+msgid "Degressive"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__display_name
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: biological_asset
+#: model_terms:ir.ui.view,arch_db:biological_asset.account_asset_biological_name_form
+msgid "Genetical Lines"
+msgstr "Lineas Genéticas"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__id
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__id
+msgid "ID"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset__is_biological
+msgid "Is Biological"
+msgstr "Es Biologico"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data____last_update
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__write_uid
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__write_date
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: biological_asset
+#: model:ir.model.fields.selection,name:biological_asset.selection__account_asset__method__linear
+msgid "Linear"
+msgstr "Lineal"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset__method
+msgid "Method"
+msgstr "Método"
+
+#. module: biological_asset
+#: model_terms:ir.ui.view,arch_db:biological_asset.account_asset_biological_name_form
+msgid "Model"
+msgstr "Modelo"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__monthly_depreciation_pct
+msgid "Monthly Depreciation Porcentage"
+msgstr "Porcentaje de Depreciación Mensual"
+
+#. module: biological_asset
+#: model_terms:ir.ui.view,arch_db:biological_asset.view_account_asset_biological_model_tree
+msgid "Number of Depreciations"
+msgstr "Número de depreciaciones"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__period
+msgid "Period"
+msgstr "Período"
+
+#. module: biological_asset
+#: model_terms:ir.ui.view,arch_db:biological_asset.view_account_asset_biological_model_tree
+msgid "Period length"
+msgstr "Duración del período"
+
+#. module: biological_asset
+#: model_terms:ir.ui.view,arch_db:biological_asset.account_asset_biological_name_form
+msgid "Race"
+msgstr "Línea Genética"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_species__name
+msgid "Race Name"
+msgstr "Nombre de la Línea Genética"
+
+#. module: biological_asset
+#: model:ir.actions.act_window,name:biological_asset.account_asset_name_action
+#: model:ir.ui.menu,name:biological_asset.master_biological_asset_species
+msgid "Races"
+msgstr "Líneas Genéticas"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset__species_id
+msgid "Species"
+msgstr "Línea Genética"
+
+#. module: biological_asset
+#: model:ir.model.fields,field_description:biological_asset.field_account_asset_data__name_id
+msgid "Species Name"
+msgstr "Nombre de la Línea Genética"
+
+#. module: biological_asset
+#: code:addons/biological_asset/models/biological_asset_models.py:0
+#, python-format
+msgid ""
+"The sum of the monthly depreciation values({}) cannot be greater than 100"
+msgstr ""
+"La suma de los valores de depreciación mensual ({}) no puede ser mayor que "
+"100"
+
+#. module: biological_asset
+#: model:ir.ui.menu,name:biological_asset.master_biological_asset_model_menu
+msgid "biological asset models"
+msgstr "Modelos de activos biológicos"

@@ -1,0 +1,64 @@
+<odoo>
+    <data>
+        <!-- Biological assets models  -->
+        <record model="ir.ui.view" id="view_account_asset_biological_tree">
+            <field name="name">view.account.asset.biological.tree</field>
+            <field name="model">account.asset</field>
+            <field name="arch" type="xml">
+                <tree string="Biological Assets" decoration-info="(state == 'draft')" decoration-muted="(state == 'close')" decoration-warning="(state == 'close' and value_residual != 0)" sample="1">
+                    <field name="name" />
+                    <field name="parent_id" optional="hide" />
+                    <field name="acquisition_date" />
+                    <field name="original_value" />
+                    <field name="method" />
+                    <field name="first_depreciation_date" />
+                    <field name="book_value" />
+                    <field name="value_residual" widget="monetary" />
+                    <field name="account_asset_id" optional="hide" />
+                    <field name="account_depreciation_id" optional="hide" />
+                    <field name="account_depreciation_expense_id" optional="hide" />
+                    <field name="currency_id" groups="base.group_multi_currency" optional="hide" />
+                    <field name="company_id" groups="base.group_multi_company" optional="hide" />
+                    <field name="state" />
+                    <field name="activity_exception_decoration" widget="activity_exception" />
+                    <field name="is_biological" invisible="1" />
+                </tree>
+            </field>
+        </record>
+
+        <!-- <record model="ir.actions.act_window" id="master_account_asset_biological_action">
+            <field name="name">Biological asset</field>
+            <field name="res_model">account.asset</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('view_account_asset_biological_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('account_asset.view_account_asset_form')})]"/>
+            <field name="domain">[('asset_type', '=', 'purchase'), ('state', '!=', 'model'), ('parent_id', '=', False), ('is_biological', '=', True)]</field>
+            <field name="context">{'asset_type': 'purchase', 'default_asset_type': 'purchase', 'is_biological': True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create new biological asset
+                </p>
+            </field>
+        </record> -->   
+
+
+    <!-- sobrescribir el accion de los activos nativos para no ver los activos biologicos en esa vista -->
+    <record model="ir.actions.act_window" id="account_asset.action_account_asset_form">
+        <field name="name">Assets</field>
+        <field name="res_model">account.asset</field>
+        <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('account_asset.view_account_asset_purchase_tree')}),
+            (0, 0, {'view_mode': 'kanban'}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('account_asset.view_account_asset_form')})]"/>
+        <field name="domain">[('asset_type', '=', 'purchase'), ('state', '!=', 'model'), ('parent_id', '=', False)]</field>
+        <field name="context">{'asset_type': 'purchase', 'default_asset_type': 'purchase'}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create new asset
+            </p>
+        </field>
+    </record>
+    <!-- sobrescribir el accion de los activos nativos para no ver los activos biologicos en esa vista -->
+
+    </data>
+</odoo>

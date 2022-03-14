@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <data>
+
+        <record id="paperformat_sale_order" model="report.paperformat">
+            <field name="name">paperformat.sale.order</field>
+            <field name="format">custom</field>
+            <field name="orientation">Portrait</field>
+            <field name="page_height">280</field>
+            <field name="page_width">220</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+        </record>
+
+        <template id="custom_layout_sale_order" name="custom_layout">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+                <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')" style="font-size: 10px">
+                    <t t-if="header">
+                        <div class="row" style="margin-bottom: 5px" >
+                            <t t-raw="header"/>
+                        </div>
+                    </t>
+                    <t t-if="invoice_info">
+                        <t t-raw="invoice_info"/>
+                    </t>
+                    <t t-if="supplier_info">
+                        <t t-raw="supplier_info"/>
+                    </t>
+                    <t t-if="sale_order_lines">
+                        <div style="height: 7cm; ">
+                            <t t-raw="sale_order_lines"/>
+                        </div>
+                    </t>
+                    <t t-if="totals">
+                        <div class="row" style="margin-top: 5px;">
+                            <t t-raw="totals"/>
+                        </div>
+                    </t>
+                    <t t-if="extra_info">
+                        <div style="margin-top: 5px;">
+                            <t t-raw="extra_info"/>
+                        </div>
+                    </t>
+                    <t t-if="signatures">
+                        <div>
+                            <t t-raw="signatures"/>
+                        </div>
+                    </t>
+                </div>
+        </template>
+    
+        <template id="report_saleorder_document_custom">
+            <t t-call="sale_customization.custom_layout_sale_order">
+                <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+                <!-- Report here -->
+                <t t-set="header">
+                    <div class="col-12 text-center">
+                        <div>
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="height: 120px; margin-bottom: 5px;" alt="Logo"/>
+                        </div>
+                        <div>
+                            <span t-field="o.company_id.partner_id.street"/>, <span t-field="o.company_id.partner_id.street2"/>, <span t-field="o.company_id.partner_id.city"/>, <span t-field="o.company_id.partner_id.state_id.name"/>, Zona Postal <span t-field="o.company_id.partner_id.zip"/>, <span t-field="o.company_id.partner_id.country_id.name"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-set="invoice_info">
+                    <div>
+                        <table class="col-12 text-center table table-sm table-bordered border border-5">
+                            <tr>
+                                <td>
+                                    <strong>COMPANY :</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.company_id.name"/>
+                                </td>
+                                <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                                <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>RIF :</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.company_id.vat"/>
+                                </td>
+                                <td>
+                                    <strong>TEAM : </strong>
+                                </td>
+                                <td>
+                                    <p>TEST TEAM</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>SELLER</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.company_id.name"/>
+                                </td>
+                                <td>
+                                    <strong>LOAD ORDER :</strong>
+                                </td>
+                                <td>
+                                    <p>TEST ORDER</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>USER :</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.user_id"/>
+                                </td>
+                                <td>
+                                    <strong>DATE :</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.date_order"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>MADE BY :</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.user_id"/>
+                                </td>
+                                <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                                <td>
+                                    <p> SYSTEM COPY</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>CLIENT :</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id"/>
+                                </td>
+                                <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                                <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>VAT :</strong>
+                                </td>
+                                <td>
+                                    <span t-field="o.partner_id.vat"/>
+                                </td>
+                                <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                                <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>ADDRESS :</strong>
+                                </td>
+                                <td colspan="3">
+                                    <span t-field="o.partner_id.city"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+                <t t-set="sale_order_lines">
+                    <div>
+                        <table class="col-12 text-center table table-sm table-bordered border border-5">
+                            <thead class="table-dark">
+                                <tr>
+                                    <td>
+                                        <strong>CODE</strong>
+                                    </td>
+                                    <td>
+                                        <strong>PRODUCT</strong>
+                                    </td>
+                                    <td>
+                                        <strong>PRODUCT TYPE</strong>
+                                    </td>
+                                    <td>
+                                        <strong>BASKETS</strong>
+                                    </td>
+                                    <td>
+                                        <strong>KILOS</strong>
+                                    </td>
+                                    <td>
+                                        <strong>PRICE</strong>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="current_subtotal" t-value="0"/>
+                                <t t-set="basket_total" t-value="0"/>
+                                <t t-foreach="o.order_line" t-as="line">
+                                    <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                                    <t t-set="basket_total" t-value="basket_total + line.product_uom_qty"/>
+                                    <tr>
+                                        <td>
+                                            <span t-field="line.product_id.default_code"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.product_id.name"/>
+                                        </td>
+                                        <td>
+                                            <p>PRODUCT TYPE</p>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.product_uom_qty"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.product_uom_qty"/>
+                                        </td>
+                                        <td>
+                                            <span t-field="line.price_subtotal" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td colspan="3">GENERAL TOTALS: </td>
+                                    <td>
+                                        <span t-esc="basket_total"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="basket_total"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+                <t t-set="signatures">
+                    <table class="col-12 text-center table table-sm table-bordered border border-5">
+                        <tr>
+                            <th>
+                                <strong>MADE BY</strong>
+                            </th>
+                            <th>
+                                <strong>AUTHORIZED BY</strong>
+                            </th>
+                            <th>
+                                <strong>DISPATCHED BY</strong>
+                            </th>
+                        </tr>
+                        <tr>
+                            <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                            <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                            <td style="empty-cells: show; width:20%; height: 1cm;"/>
+                        </tr>
+                    </table>
+                </t>
+            </t>
+        </template>
+
+        <template id="report_saleorder_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="sale_customization.report_saleorder_document_custom" t-lang="o.partner_id.lang"/>
+                    <!-- <t t-call="sale_customization.report_saleorder_conditions" t-lang="o.partner_id.lang"/> -->
+                </t>
+            </t>
+        </template>
+
+        <report 
+            string="sale Order" 
+            id="sale.action_report_saleorder" 
+            model="sale.order" 
+            report_type="qweb-pdf"
+            paperformat="paperformat_sale_order"
+            name="sale_customization.report_saleorder_custom" 
+            file="sale_customization.report_saleorder_custom"
+            print_report_name="
+                (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or
+                'sale Order - %s' % (object.name))"
+        />
+    
+    </data>
+</odoo>
